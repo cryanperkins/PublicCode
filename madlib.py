@@ -9,7 +9,7 @@ variable = {'student_no':8,'place':'pdxcodeguild','instructor_name':'Grant Holly
 
 
 story="""
-There were  %(student_no)d students in %(place)s.  The instructor's name is %(instructor_name)s.  The students were super %(emotion)s to be there.  Sitting in front of their %(machine)s, they jumped for
+There were more than  %(student_no)d students in %(place)s.  The instructor's name is %(instructor_name)s.  The students were super %(emotion)s to be there.  Sitting in front of their %(machine)s, they jumped for
 joy every time %(instructor_name)s showed them something new...until something went terribly wrong.  Who knew that entering the wrong code in %(language)s would release an actual
 %(animal)s snake?  The %(animal)s slithered out of the front monitor and headed straight for the %(st_no)d students in the %(row)dst row.  Wrapping them all up at once the %(animal)s was
 about to swallow them when suddenly %(instructor_name)s used the top secret code and a snake-eating dragon flew out of the monitor and grabbed the %(animal)s in its
