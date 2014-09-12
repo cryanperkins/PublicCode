@@ -11,10 +11,12 @@ def intro():
 #If the person is not in the phone book it then directs the user to the replay function.
 def check_dict(search):
     if search in phonebook:
-        print phonebook[search]
-        intro()
-    else:
-        replay()
+        print phonebook[search]['name']
+        print phonebook[search]['address']
+        print phonebook[search]['number']
+        #intro()
+    # else:
+    #     replay()
 
         #return data_entry()
 
