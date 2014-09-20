@@ -5,7 +5,7 @@ from urllib2 import urlopen
 import urllib
 from googlemaps import GoogleMaps
 import geocoder
-
+import json
 
 # #This is the code to find directions from one location to another using GoogleMaps.
 # api_key = 'AIzaSyAyspF7tDu4Tv0X23RQDjoCoVewalLRv4Q'
@@ -83,18 +83,57 @@ def data_load(url):
     return j
 
 
-def parse_json(j):
-    for node in j['rows']:
-        print response
+def parse_json(json_object):
+    """
+    first duration dict object is the driver start to driver end
+    second duration dict object is the driver start to rider start
+    third duration dict object is the driver start to the rider end
+
+    fourth duration dict object is the rider start to the driver end
+    fifth duration dict object is the rider start to rider start
+    sixth duration dict object is the rider start to the rider end
+
+    :json object is passed in:
+    """
+    rows = json_object['rows']
+    final_durations = []
+    for row in rows:
+        elements = row['elements']
+        durations = {}
+        for e in elements:
+            if 'duration' in e.keys():
+                duration = e['duration']['value']
+                durations['duration'] = duration
+                final_durations.append(duration)
+    return final_durations
+
+
+def get_extra_driving_time(list_of_times):
+    """
+
+    :param list_of_times:
+    :return:
+    """
+
+
+
+    # v = j['rows'][0]['elements'][0]['duration']['value']
+    # print v
+    # print node in :
+    #     print node[:]
 
 #url_lookup()
-url = url_lookup()
-json_obj = data_load()
-
-data_load()
-parse_json(json_obj)
+request = url_lookup()
+# json_obj = data_load()
+#
+# data_load()
+# parse_json(json_obj)
 #lat_lng()
+json_response = data_load(request)
 
+times = parse_json(json_response)
+
+get_extra_driving_time(times)
 # # https://maps.googleapis.com/maps/api/geocode/output?parameters
 #
 # # #Get the distance between two coordinates.
@@ -166,3 +205,4 @@ parse_json(json_obj)
 #     return r #rider_start, rider_destination
 #
 # #driver()
+
