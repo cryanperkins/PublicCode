@@ -7,7 +7,7 @@ n = input("Choose a number greater than 1.")
 
 #print ("2\n3\n5\n7\n")
 
-primes = [2, 3, 5, 7, ]
+primes = [2, 3, 5, 7, 11, 13, 17, 19]
 
 for i in range(8, n + 1):
 
