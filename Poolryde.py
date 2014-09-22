@@ -8,17 +8,20 @@ import geocoder
 import json
 
 # #This is the code to find directions from one location to another using GoogleMaps.
-# api_key = 'AIzaSyAyspF7tDu4Tv0X23RQDjoCoVewalLRv4Q'
-# gmaps = GoogleMaps(api_key)
-# start = raw_input('Enter your starting address.')
-# end = raw_input('Enter your destination.')
-# dirs = gmaps.directions(start, end)
-# time = dirs['Directions']['Duration']['seconds']
-# dist = dirs['Directions']['Distance']['meters']
-# route = dirs['Directions']['Routes'][0]
-# for step in route['Steps']:
-#     print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
-#     print step['descriptionHtml']
+def get_directions(maps):
+    api_key = 'AIzaSyAyspF7tDu4Tv0X23RQDjoCoVewalLRv4Q'
+    gmaps = GoogleMaps(api_key)
+    start = ",".join(driver_start_latlng())
+    end = ",".join(rider_start_latlng())
+    start2 = ",".join(rider_end_latlng())
+    end2 = ",".join(driver_end_latlng())
+    dirs = gmaps.directions(start, end, start2, end2)
+    time = dirs['Directions']['Duration']['seconds']
+    dist = dirs['Directions']['Distance']['meters']
+    route = dirs['Directions']['Routes'][0]
+    for step in route['Steps']:
+        print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
+        print step['descriptionHtml']
 
 #
 
@@ -49,7 +52,7 @@ def rider_start_latlng():
 def rider_end_latlng():
     rider_destination = raw_input("Rider, enter your destination.")
     results4 = geocoder.google(rider_destination)
-    return [str(results4.lat), str(results4.lng)]
+    print [str(results4.lat), str(results4.lng)]
 
 
 
@@ -68,6 +71,7 @@ def url_lookup():
     url += 'origins='
     url += driver_start + "|"
     url += rider_start + "|"
+    url += rider_destination + "|"
     url += '&destinations='
     url += driver_destination + "|"
     url += rider_start + "|"
@@ -92,7 +96,9 @@ def parse_json(json_object):
     fourth duration dict object is the rider start to the driver end
     fifth duration dict object is the rider start to rider start
     sixth duration dict object is the rider start to the rider end
-
+    seventh duration dict object is the rider end to the driver end
+    eighth duration dict object is the rider end to the rider start
+    ninth duration dict object is the rider end to the rider end
     :json object is passed in:
     """
     rows = json_object['rows']
@@ -109,6 +115,16 @@ def parse_json(json_object):
 
 
 def get_extra_driving_time(list_of_times):
+
+    times = list_of_times
+    extra_driving_time = (times[1] + times[5] + times[6] - times[0])/60
+
+    if extra_driving_time <= 60:
+        print "this will add {} minutes to your drive time".format(extra_driving_time)
+        ask_user = raw_input("If you would like to pick up this rider and get directions enter 'y', if not, press 'n'").lower()
+        if ask_user == 'y':
+
+
     """
 
     :param list_of_times:
@@ -128,12 +144,13 @@ request = url_lookup()
 #
 # data_load()
 # parse_json(json_obj)
-#lat_lng()
+#lat_lng() mk8
 json_response = data_load(request)
 
 times = parse_json(json_response)
 
 get_extra_driving_time(times)
+get_directions()
 # # https://maps.googleapis.com/maps/api/geocode/output?parameters
 #
 # # #Get the distance between two coordinates.
