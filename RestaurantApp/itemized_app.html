@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+
+    /*create an array of receipt items and prices.*/
+
+var receipt = {'chicken': 8.00, soda: 1.00, burger: 5.00, beer: 3.50};
+
+/*function sum(items) {
+  var sum = 0;
+    for (var price in items) {
+      if(items.hasOwnProperty(price)) {
+         sum += parseFloat(items[price]);
+        }
+    }
+    return sum;
+
+var receipt = {'chicken': 8.00, soda: 1.00, burger: 5.00, beer: 3.50};
+var summed = sum(receipt);
+
+sum(receipt);*/
+    var order_questions = function() {
+    var items = prompt('What did you order?');
+    var item_list = [];
+    item_list.push(items);
+    var follow_up = prompt('Did you order anything else?  Enter y for yes, or n for no.');
+      if(follow_up === 'y') {
+          order_questions();
+      }
+      else {
+      itemized_list(item_list, receipt);
+      }
+    };
+
+    var total_diners;
+    total_diners = prompt('How many diners are there?');
+    total_diners = parseInt(total_diners);
+
+
+
+
+    var itemized_list = function(list_of_ordered_items, receipt_object) {
+
+        for (var i = 0; i < list_of_ordered_items.length; i++) {
+            if (list_of_ordered_items[i] in receipt_object) {
+                console.log(receipt_object[list_of_ordered_items[i]]);
+                var total = 0;
+                for (var each_number in item_list) {
+                    total+= +receipt[i];
+                    alert (total); {
+                    var large_party_tip = total * .18;
+                    alert('This is the large party tip amount.' + large_party_tip);
+                    }
+                }
+
+            }
+        }
+    };
+
+
+order_questions();
+
+
+/*var list_items = prompt('What did you order?');
+    x = [];
+    x.push(list_items);
+    alert (list_items);
+
+var receipt_items = {'chicken': 8.00, 'soda': 1.00, 'burger': 5.00, 'beer': 3.50
+};*/
+
+
+
+/*var cost = [];
+
+var itemized = function(a, b) {
+    for (var items = 0; x < receipt_items.length; x++) {
+        if ([list_items] in receipt_items) {
+            x.push(list_items[receipt_items[items]]);
+
+        }
+    }
+};*/
+
+/*itemized(list_items, receipt_items);*/
+
+
+
+/*var receipt = {'chicken': 8.00, 'soda: 1.00, burger: 5.00, beer: 3.50
+
+};*/
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
