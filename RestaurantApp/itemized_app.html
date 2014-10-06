@@ -8,41 +8,38 @@
 <script>
 
     /*create an array of receipt items and prices.*/
+    (function(){
 
-var receipt = {'chicken': 8.00, soda: 1.00, burger: 5.00, beer: 3.50};
+    var receipt = {'chicken': 8.00, soda: 1.00, burger: 5.00, beer: 3.50};
 
-/*function sum(items) {
-  var sum = 0;
-    for (var price in items) {
-      if(items.hasOwnProperty(price)) {
-         sum += parseFloat(items[price]);
-        }
-    }
-    return sum;
-
-var receipt = {'chicken': 8.00, soda: 1.00, burger: 5.00, beer: 3.50};
-var summed = sum(receipt);
-
-sum(receipt);*/
-    var order_questions = function() {
-    var items = prompt('What did you order?');
-    var item_list = [];
-    item_list.push(items);
-    var follow_up = prompt('Did you order anything else?  Enter y for yes, or n for no.');
-      if(follow_up === 'y') {
-          order_questions();
-      }
-      else {
-      itemized_list(item_list, receipt);
-      }
+    var total_diners = function() {
+        total_diners = prompt('How many diners are there?');
+        total_diners = parseInt(total_diners);
+        alert(total_diners);
     };
 
-    var total_diners;
-    total_diners = prompt('How many diners are there?');
-    total_diners = parseInt(total_diners);
+    total_diners();
 
+    var order_questions = function() {
+         var items = prompt('What did you order?');
+         var item_list = [];
+         item_list.push(items);
+         return (item_list);
+    };
 
+        order_questions();
 
+    var follow_up = function() {
+        prompt('Did you order anything else?  Enter y for yes, or n for no.');
+
+        if(follow_up === 'y') {
+            order_questions();
+        }
+        else {
+            itemized_list(item_list, receipt);
+        }
+    };
+    follow_up();
 
     var itemized_list = function(list_of_ordered_items, receipt_object) {
 
@@ -61,10 +58,8 @@ sum(receipt);*/
             }
         }
     };
-
-
-order_questions();
-
+    itemized_list();
+})();
 
 /*var list_items = prompt('What did you order?');
     x = [];
