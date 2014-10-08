@@ -8,48 +8,70 @@
 <script>
 (function() {
     var menu = {'chicken': 13, 'pizza': 12, 'salad': 7, 'beer': 4, 'wine': 7};
-    var party_size = parseInt("How many people are in your party?");
+    var party_size = parseInt(prompt("How many people are in your party?"));
     var group = [];
 
     for (var i = 0; i < party_size; i++) {
         var individuals = prompt("What's your name?");
         var new_individual = new Person(individuals);
         group.push(new_individual);
-    };
-
-    for (var i = 0; i < group.length; i++) {
-        var order = prompt("What did you order?");
-        group[i].check.ordered_items.push(order);
-        group[i].check.total += menu[order];
-        var follow_up = prompt("Did you order anything else?");
-
     }
+
+    var order = function() {
+
+        var ask = function () {
+
+            var follow_up = "y";
+
+            while (follow_up === "y"){
+                var order = prompt(group[i].name + ", what did you order?");
+
+                group[i].getCost(order);
+
+                follow_up = prompt("Did you order anything else?  Answer y for yes or n for no.");
+            }
+        };
+        for (var i = 0; i < group.length; i++) {
+            ask();
+        }
+    };
+    order();
+
     function Person(name) {
         this.name = name;
         this.check = {total: 0, tip: 0, ordered_items: []};
-        this.getCost = function () {
 
-            for (var item = 0; item < this.check.ordered_items.length; item++) {
-                if (this.check.ordered_items[item] in menu) {
-                    return this.check.total += menu[this.check.ordered_items[item]]
-                }
-            }
+        this.getCost = function (item) {
+
+            this.check.ordered_items.push(item);
+            this.check.total += menu[item];
         };
 
+        this.tip = function () {
 
-         this.tip = function() {
             var individual_tip = prompt("What percentage do you want to tip?");
-            console.log("Your tip amount is" + parseInt(individual_tip/100));
-            return this.check.tip.push(parseInt(individual_tip/100));
+            console.log("Your tip amount is " + (individual_tip / 100));
+            return this.check.tip = 1 + (individual_tip / 100);
 
+        };
+
+        this.total = function () {
+            console.log("Your total bill is " + this.check.total + " with tip " + this.check.tip);
+            this.check.total *= this.check.tip;
+            return this.check.total * this.check.tip;
+        }
+    }
+
+    var makeChecks = function () {
+        for (var i = 0; i < group.length; i++) {
+            alert("ok, " + group[i].name + " your current bill is $" + group[i].check.total);
+            group[i].tip();
+            group[i].total();
+            alert("your total bill with tip is $" + group[i].check.total)
         }
     };
-        var individual_total = function() {
-            console.log("Your total bill is" + this.check.total + this.check.tip);
-        }
 
-
-
+    makeChecks();
 })();
 </script>
 </body>
