@@ -6,55 +6,35 @@ import urllib
 from googlemaps import GoogleMaps
 import geocoder
 import json
-
-# #This is the code to find directions from one location to another using GoogleMaps.
-def get_directions(maps):
-    api_key = 'AIzaSyAyspF7tDu4Tv0X23RQDjoCoVewalLRv4Q'
-    gmaps = GoogleMaps(api_key)
-    start = ",".join(driver_start_latlng())
-    end = ",".join(rider_start_latlng())
-    start2 = ",".join(rider_end_latlng())
-    end2 = ",".join(driver_end_latlng())
-    dirs = gmaps.directions(start, end, start2, end2)
-    time = dirs['Directions']['Duration']['seconds']
-    dist = dirs['Directions']['Distance']['meters']
-    route = dirs['Directions']['Routes'][0]
-    for step in route['Steps']:
-        print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
-        print step['descriptionHtml']
-
 #
 
 #Convert an address into latitude and longitude
 #To do: Use a while loop for the functions below.
+driver_start = raw_input("Driver, enter your starting address.")
+driver_end = raw_input("Driver, enter your destination.")
+rider_start = raw_input("Rider, enter your starting address.")
+rider_destination = raw_input("Rider, enter your destination.")
+
+
 
 def driver_start_latlng():
-    driver_start = raw_input("Driver, enter your starting address.")
     results1 = geocoder.google(driver_start)
     return [str(results1.lat), str(results1.lng)]
 
 
 def driver_end_latlng():
-    """
-
-
-    :return:
-    """
-    driver_end = raw_input("Driver, enter your destination.")
     results2 = geocoder.google(driver_end)
     return [str(results2.lat), str(results2.lng)]
 
+
 def rider_start_latlng():
-    rider_start = raw_input("Rider, enter your starting address.")
     results3 = geocoder.google(rider_start)
     return [str(results3.lat), str(results3.lng)]
 
+
 def rider_end_latlng():
-    rider_destination = raw_input("Rider, enter your destination.")
     results4 = geocoder.google(rider_destination)
-    print [str(results4.lat), str(results4.lng)]
-
-
+    return [str(results4.lat), str(results4.lng)]
 
 
 def url_lookup():
@@ -114,43 +94,91 @@ def parse_json(json_object):
     return final_durations
 
 
+#This function below will calculate the extra amount of time that would be added
+#to the driver's drive time if a passenger is picked up and dropped off at her destination first.
+#It then informs the driver of the extra time added to the trip and asks if he would still like to pick up the poolryder.
+#If the driver elects to pick up the poolryder the program moves to the get_directions function.  If the driver declines
+#an incentive is offered in the attempt to bribe the driver and if that doesn't work the program ends.
 def get_extra_driving_time(list_of_times):
 
     times = list_of_times
     extra_driving_time = (times[1] + times[5] + times[6] - times[0])/60
 
-    if extra_driving_time <= 60:
-        print "this will add {} minutes to your drive time".format(extra_driving_time)
+    if extra_driving_time >= 60:
+        hours = extra_driving_time/60
+        print "This will add {} hours to your drive time.".format(hours)
         ask_user = raw_input("If you would like to pick up this rider and get directions enter 'y', if not, press 'n'").lower()
         if ask_user == 'y':
+            return get_directions()
+        else:
+            ask_user = raw_input("What if I gave you a free ice cream cone?  Enter 'y' or 'n'.").lower()
+            if ask_user == 'y':
+                print ("Awesome, ice cream is the best, and so are you.")
+                return get_directions()
+            else:
+                print("Fine, be that way.")
+    else:
+        print "This will add {} minutes to your drive time".format(extra_driving_time)
+        ask_user = raw_input("If you would like to pick up this rider and get directions enter 'y', if not, press 'n'").lower()
+        if ask_user == 'y':
+            return get_directions()
+        else:
+            ask_user = raw_input("What if I took you out to Denny's?  Enter 'y' or 'n'.").lower()
+            if ask_user == 'y':
+                print ("Great choice.  Denny's was my grandfather's favorite.")
+                return get_directions()
+            else:
+                print("What's wrong with you?  Who could refuse Denny's?")
 
 
-    """
+#This is the code to find directions from the driver's origin to the rider's origin to the rider's
+#destination to the driver's destination using GoogleMaps.
+def get_directions():
+    api_key = 'AIzaSyAyspF7tDu4Tv0X23RQDjoCoVewalLRv4Q'
+    gmaps = GoogleMaps(api_key)
+    start = ",".join(driver_start_latlng())
+    end = ",".join(rider_start_latlng())
+    start2 = ",".join(rider_end_latlng())
+    end2 = ",".join(driver_end_latlng())
+    dirs = gmaps.directions(start, end)
+    time = dirs['Directions']['Duration']['seconds']
+    dist = dirs['Directions']['Distance']['meters']
+    route = dirs['Directions']['Routes'][0]
+    dirs1 = gmaps.directions(end, start2)
+    time1 = dirs1['Directions']['Duration']['seconds']
+    dist1 = dirs1['Directions']['Distance']['meters']
+    route1 = dirs1['Directions']['Routes'][0]
+    dirs2 = gmaps.directions(start2, end2)
+    time2 = dirs2['Directions']['Duration']['seconds']
+    dist2 = dirs2['Directions']['Distance']['meters']
+    route2 = dirs2['Directions']['Routes'][0]
+    for step in route['Steps']:
+        #print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
+        print step['descriptionHtml']
+    for step in route1['Steps']:
+        #print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
+        print step['descriptionHtml']
+    for step in route2['Steps']:
+       # print step['Point']['coordinates'][1], step['Point']['coordinates'][0]
+        print step['descriptionHtml']
 
-    :param list_of_times:
-    :return:
-    """
 
 
-
-    # v = j['rows'][0]['elements'][0]['duration']['value']
-    # print v
-    # print node in :
-    #     print node[:]
-
-#url_lookup()
 request = url_lookup()
-# json_obj = data_load()
+## json_obj = data_load()
 #
-# data_load()
-# parse_json(json_obj)
-#lat_lng() mk8
+## data_load()
+## parse_json(json_obj)
+##lat_lng() mk8
 json_response = data_load(request)
 
 times = parse_json(json_response)
 
 get_extra_driving_time(times)
-get_directions()
+#maps = get_directions
+#get_directions()
+
+#get_directions()
 # # https://maps.googleapis.com/maps/api/geocode/output?parameters
 #
 # # #Get the distance between two coordinates.
